@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import api from '../Utils/api';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
+import { Trash2, Save, RefreshCw, AlertCircle, Plus, Image as ImageIcon } from 'lucide-react';
 
 const AdminTrial = () => {
     const [products, setProducts] = useState([]);
@@ -151,12 +153,13 @@ const AdminTrial = () => {
                 config
             );
 
-            alert('Product updated successfully');
-            window.location.reload();
+            toast.success('Product updated successfully');
+            setTimeout(() => window.location.reload(), 1500);
 
         } catch (err) {
             console.error(err);
-            alert(`Error: ${err.response ? err.response.data.message : err.message}`);
+            const msg = err.response ? err.response.data.message : err.message;
+            toast.error(`Error: ${msg}`);
         } finally {
             setSavingProductId(null); // Re-enable button (though page usually reloads on success)
         }
@@ -327,15 +330,15 @@ const AdminTrial = () => {
                                     </button>
                                     <button
                                         onClick={async () => {
-                                            if (window.confirm('Are you sure you want to delete this product?')) {
-                                                try {
-                                                    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-                                                    const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
-                                                    await api.delete(`/api/products/${product._id}`, config);
-                                                    setProducts(products.filter(p => p._id !== product._id));
-                                                } catch (err) {
-                                                    alert(err.message);
-                                                }
+                                            // Custom confirm toast can be added later, for now we just do it
+                                            try {
+                                                const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+                                                const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
+                                                await api.delete(`/api/products/${product._id}`, config);
+                                                setProducts(products.filter(p => p._id !== product._id));
+                                                toast.success('Product deleted');
+                                            } catch (err) {
+                                                toast.error(err.message);
                                             }
                                         }}
                                         className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-xs"

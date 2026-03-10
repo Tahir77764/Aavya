@@ -3,8 +3,9 @@ import axios from 'axios';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import {
     ArrowLeft, Loader2, AlertCircle, User, ShoppingBag,
-    ShoppingCart, Save, Trash2, Mail, Calendar, CheckCircle, XCircle
+    ShoppingCart, Save, Trash2, Mail, Calendar, CheckCircle, XCircle, RefreshCw
 } from 'lucide-react';
+import { toast } from 'react-hot-toast';
 
 const STATUS_COLORS = {
     Pending: 'bg-yellow-100 text-yellow-700',
@@ -71,22 +72,24 @@ const UserDetail = () => {
                 getConfig()
             );
             setUser(prev => ({ ...prev, name: data.name, email: data.email }));
-            setSaveMsg('Saved successfully.');
+            toast.success('Profile updated successfully.');
         } catch (err) {
-            setSaveMsg(err.response?.data?.message || err.message);
+            const msg = err.response?.data?.message || err.message;
+            toast.error(msg);
         } finally {
             setSaving(false);
         }
     };
 
     const clearCart = async () => {
-        if (!window.confirm("Clear this user's cart?")) return;
+        // Direct action
         try {
             setClearingCart(true);
             await axios.delete(`${import.meta.env.VITE_API_URL}/api/cart/user/${id}`, getConfig());
             setCart({ items: [] });
+            toast.success("User's cart cleared.");
         } catch (err) {
-            alert(err.response?.data?.message || err.message);
+            toast.error(err.response?.data?.message || err.message);
         } finally {
             setClearingCart(false);
         }
@@ -99,9 +102,18 @@ const UserDetail = () => {
     );
 
     if (error) return (
-        <div className="flex h-screen items-center justify-center bg-gray-50 flex-col gap-4">
-            <AlertCircle className="h-12 w-12 text-red-500" />
-            <p className="text-red-600">{error}</p>
+        <div className="min-h-screen flex items-center justify-center bg-gray-50 p-6">
+            <div className="bg-gray-900 border-l-4 border-avaya-gold p-10 shadow-2xl animate-in zoom-in duration-500 rounded-r-3xl max-w-md w-full text-center">
+                <AlertCircle size={40} className="text-avaya-gold mx-auto mb-4" />
+                <h2 className="text-xl font-serif text-white mb-2 tracking-widest uppercase">System Error</h2>
+                <p className="text-gray-400 text-sm mb-6">{error}</p>
+                <button
+                    onClick={() => window.location.reload()}
+                    className="inline-flex items-center gap-2 bg-avaya-gold text-white px-8 py-2 rounded-lg font-bold uppercase tracking-widest text-xs hover:bg-black transition-all"
+                >
+                    <RefreshCw size={14} /> Retry
+                </button>
+            </div>
         </div>
     );
 
@@ -165,11 +177,6 @@ const UserDetail = () => {
                                 </div>
                             </div>
 
-                            {saveMsg && (
-                                <p className={`text-xs mt-3 ${saveMsg.includes('success') || saveMsg.includes('Saved') ? 'text-green-600' : 'text-red-500'}`}>
-                                    {saveMsg}
-                                </p>
-                            )}
 
                             <button
                                 onClick={saveUser}

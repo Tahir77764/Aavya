@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
 import api from '../Utils/api';
 
 const Signup = () => {
@@ -15,6 +16,7 @@ const Signup = () => {
         e.preventDefault();
         if (password !== confirmPassword) {
             setMessage('Passwords do not match');
+            toast.error('Passwords do not match');
         } else {
             setMessage(null);
             try {
@@ -30,11 +32,13 @@ const Signup = () => {
                     config
                 );
 
-                // Navigate to verify otp page with email state
+                toast.success('Account created! Please verify your OTP.');
                 navigate('/verify-otp', { state: { email } });
 
             } catch (err) {
-                setError(err.response && err.response.data.message ? err.response.data.message : err.message);
+                const msg = err.response && err.response.data.message ? err.response.data.message : err.message;
+                setError(msg);
+                toast.error(msg);
             }
         }
     };
@@ -43,8 +47,18 @@ const Signup = () => {
         <div className="min-h-screen py-20 flex justify-center items-center bg-gray-50">
             <div className="w-full max-w-md bg-white rounded-lg shadow-xl p-8">
                 <h2 className="text-3xl font-serif text-center text-gray-800 mb-8">Register</h2>
-                {message && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">{message}</div>}
-                {error && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">{error}</div>}
+                {(error || message) && (
+                    <div className="bg-gray-900 border-l-4 border-avaya-gold p-4 mb-6 shadow-lg animate-in fade-in slide-in-from-top-2 duration-300">
+                        <div className="flex items-center gap-3">
+                            <div className="flex-shrink-0">
+                                <span className="text-avaya-gold text-xl">⚠️</span>
+                            </div>
+                            <div>
+                                <p className="text-sm text-gray-200 font-trajan tracking-wider uppercase">{error || message}</p>
+                            </div>
+                        </div>
+                    </div>
+                )}
 
                 <form onSubmit={submitHandler} className="space-y-6">
                     <div>

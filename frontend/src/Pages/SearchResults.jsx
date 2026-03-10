@@ -182,25 +182,28 @@ const SearchResults = () => {
 
                 {/* Empty Results State */}
                 {!loading && keyword && products.length === 0 && (
-                    <div className="flex flex-col items-center justify-center py-28 text-center gap-5">
-                        <div className="w-24 h-24 rounded-full bg-[#c9a84c]/10 flex items-center justify-center">
-                            <SlidersHorizontal size={40} className="text-[#c9a84c]" />
-                        </div>
-                        <h2 className="text-2xl font-trajan text-gray-700">No Results Found</h2>
-                        <p className="text-gray-400 font-sans max-w-sm">
-                            We couldn't find any jewellery matching <span className="text-[#c9a84c] font-semibold italic">"{keyword}"</span>.
-                            <br />Try a different name or browse our collections.
-                        </p>
-                        <div className="flex flex-wrap justify-center gap-3 mt-2">
-                            {['Rings', 'Necklaces', 'Bangles', 'Earrings'].map(cat => (
-                                <button
-                                    key={cat}
-                                    onClick={() => { setInputValue(cat); setSearchParams({ keyword: cat }); }}
-                                    className="px-5 py-2 border border-[#c9a84c]/50 rounded-full text-sm text-[#c9a84c] hover:bg-[#c9a84c] hover:text-white transition-colors duration-300 font-sans"
-                                >
-                                    {cat}
-                                </button>
-                            ))}
+                    <div className="flex flex-col items-center justify-center py-28 text-center gap-6">
+                        <div className="bg-gray-900 border-l-4 border-avaya-gold p-12 shadow-2xl animate-in zoom-in duration-500 rounded-r-[3rem] max-w-xl relative overflow-hidden">
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-avaya-gold/5 rounded-full blur-2xl"></div>
+                            <div className="w-20 h-20 rounded-full bg-avaya-gold/10 flex items-center justify-center mx-auto mb-6">
+                                <Search size={40} className="text-avaya-gold" />
+                            </div>
+                            <h2 className="text-3xl font-trajan text-white mb-4 tracking-widest uppercase">No Treasures Found</h2>
+                            <p className="text-gray-400 font-sans max-w-sm mx-auto mb-8">
+                                We couldn't find any jewellery matching <span className="text-avaya-gold font-semibold italic">"{keyword}"</span>.
+                                <br />Explore our popular categories instead.
+                            </p>
+                            <div className="flex flex-wrap justify-center gap-3">
+                                {['Rings', 'Necklaces', 'Bangles', 'Earrings'].map(cat => (
+                                    <button
+                                        key={cat}
+                                        onClick={() => { setInputValue(cat); setSearchParams({ keyword: cat }); }}
+                                        className="px-6 py-2 border border-avaya-gold/30 rounded-full text-xs text-avaya-gold hover:bg-avaya-gold hover:text-white transition-all duration-300 font-bold uppercase tracking-widest"
+                                    >
+                                        {cat}
+                                    </button>
+                                ))}
+                            </div>
                         </div>
                     </div>
                 )}

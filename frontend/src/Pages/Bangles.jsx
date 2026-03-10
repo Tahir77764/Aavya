@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import ProductCard from '../Components/ProductCard';
 import ProductFilterBar from '../Components/ProductFilterBar';
 import { getProducts, getCategories } from '../Utils/api';
+import { toast } from 'react-hot-toast';
+import { ShoppingBag, RefreshCw, AlertCircle } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Bangles = () => {
     const [products, setProducts] = useState([]);
@@ -40,8 +43,9 @@ const Bangles = () => {
                 setProducts(list);
                 setFilteredProducts(list);
             } catch (err) {
-                console.error('Error fetching products:', err);
-                setError(err.response?.data?.message || 'Failed to load products');
+                const msg = err.response?.data?.message || 'Failed to load products';
+                setError(msg);
+                toast.error(msg);
             } finally {
                 setLoading(false);
             }
@@ -74,18 +78,29 @@ const Bangles = () => {
                         <p className="mt-4 text-gray-600">Loading products...</p>
                     </div>
                 ) : error ? (
-                    <div className="text-center py-20">
-                        <p className="text-red-600 mb-4">{error}</p>
-                        <button
-                            onClick={() => window.location.reload()}
-                            className="bg-avaya-gold text-white px-6 py-2 rounded-sm hover:bg-yellow-600 transition-colors"
-                        >
-                            Try Again
-                        </button>
+                    <div className="flex flex-col items-center justify-center py-20 text-center">
+                        <div className="bg-gray-900 border-l-4 border-avaya-gold p-10 shadow-2xl animate-in zoom-in duration-500 rounded-r-3xl max-w-md">
+                            <AlertCircle size={40} className="text-avaya-gold mx-auto mb-4" />
+                            <h2 className="text-xl font-trajan text-white mb-4 tracking-widest uppercase">Connectivity Lost</h2>
+                            <p className="text-gray-400 text-sm mb-6">{error}</p>
+                            <button
+                                onClick={() => window.location.reload()}
+                                className="inline-flex items-center gap-2 bg-avaya-gold text-white px-6 py-2 rounded-lg font-bold uppercase tracking-widest text-xs hover:bg-white hover:text-black transition-all"
+                            >
+                                <RefreshCw size={14} /> Reconnect
+                            </button>
+                        </div>
                     </div>
                 ) : products.length === 0 ? (
-                    <div className="text-center py-20">
-                        <p className="text-gray-600 text-lg">No products found in this category.</p>
+                    <div className="flex flex-col items-center justify-center py-24 text-center">
+                        <div className="bg-gray-900 border-l-4 border-avaya-gold p-12 shadow-2xl animate-in zoom-in duration-500 rounded-r-[3rem] max-w-xl">
+                            <ShoppingBag size={48} className="text-avaya-gold mx-auto mb-6 opacity-50" strokeWidth={1} />
+                            <h2 className="text-3xl font-trajan text-white mb-4 tracking-widest uppercase">Awaiting Masterpieces</h2>
+                            <p className="text-gray-400 font-sans mb-8">Our artisans are crafting new bangles and bracelets. Visit us again soon.</p>
+                            <Link to="/" className="inline-block bg-avaya-gold text-white px-8 py-3 rounded-lg font-bold uppercase tracking-widest text-xs hover:bg-white hover:text-black transition-all">
+                                Explore Others
+                            </Link>
+                        </div>
                     </div>
                 ) : (
                     <>

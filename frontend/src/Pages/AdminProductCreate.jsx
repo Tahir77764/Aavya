@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import api from '../Utils/api';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
+import { AlertCircle, ArrowLeft, Plus } from 'lucide-react';
 
 const AdminProductCreate = () => {
     const navigate = useNavigate();
@@ -64,7 +66,7 @@ const AdminProductCreate = () => {
 
             await api.post('/api/products', formData, config);
             setUploading(false);
-            alert('Product created successfully');
+            toast.success('Product created successfully');
             navigate('/admin-trial');
         } catch (error) {
             console.error(error);
@@ -77,7 +79,14 @@ const AdminProductCreate = () => {
         <div className="container mx-auto px-4 py-8 max-w-2xl">
             <button onClick={() => navigate('/admin-trial')} className="mb-4 text-blue-500 hover:underline">Go Back</button>
             <h1 className="text-3xl font-bold mb-6">Create New Product</h1>
-            {error && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">{error}</div>}
+            {error && (
+                <div className="bg-gray-900 border-l-4 border-avaya-gold p-4 mb-6 shadow-xl animate-in slide-in-from-top-2 duration-300 rounded-r-xl">
+                    <div className="flex items-center gap-3">
+                        <AlertCircle className="text-avaya-gold h-5 w-5" />
+                        <p className="text-sm text-gray-200 font-bold uppercase tracking-widest">{error}</p>
+                    </div>
+                </div>
+            )}
 
             <form onSubmit={submitHandler} className="space-y-4 bg-white p-6 rounded shadow-md">
 

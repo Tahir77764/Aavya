@@ -80,8 +80,15 @@ const UserEdit = () => {
 
                 <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-8">
                     {error && (
-                        <div className="mb-6 bg-red-50 border-l-4 border-red-500 p-4 rounded-r-lg">
-                            <p className="text-sm text-red-700">{error}</p>
+                        <div className="bg-gray-900 border-l-4 border-avaya-gold p-4 mb-8 shadow-lg animate-in fade-in slide-in-from-top-2 duration-300 rounded-r-xl">
+                            <div className="flex items-center gap-3">
+                                <div className="flex-shrink-0 h-10 w-10 bg-avaya-gold/10 rounded-full flex items-center justify-center">
+                                    <span className="text-avaya-gold text-lg">⚠️</span>
+                                </div>
+                                <div>
+                                    <p className="text-sm text-gray-200 font-bold uppercase tracking-widest">{error}</p>
+                                </div>
+                            </div>
                         </div>
                     )}
 

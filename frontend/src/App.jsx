@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
 import { CartProvider } from './Context/CartContext';
 import Navbar from './Components/Navbar';
 import Footer from './Components/Footer';
@@ -41,6 +42,36 @@ function App() {
     return (
         <CartProvider>
             <Router>
+                <Toaster
+                    position="top-right"
+                    toastOptions={{
+                        style: {
+                            background: '#111827',
+                            color: '#fff',
+                            border: '1px solid #D4AF37',
+                            borderRadius: '4px',
+                            fontSize: '14px',
+                            fontFamily: 'TrajanPro, serif',
+                            letterSpacing: '0.05em',
+                            padding: '16px',
+                            boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.5)',
+                        },
+                        success: {
+                            duration: 4000,
+                            iconTheme: {
+                                primary: '#D4AF37',
+                                secondary: '#111827',
+                            },
+                        },
+                        error: {
+                            duration: 5000,
+                            iconTheme: {
+                                primary: '#ef4444',
+                                secondary: '#fff',
+                            },
+                        },
+                    }}
+                />
                 <ScrollToTop />
                 <div className="min-h-screen bg-white">
                     <Navbar />

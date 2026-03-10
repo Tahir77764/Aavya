@@ -3,6 +3,7 @@ import axios from 'axios';
 import { authConfig } from "../utils/authConfig";
 import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, Loader2, AlertCircle, Package, Trash2 } from 'lucide-react';
+import { toast } from 'react-hot-toast';
 
 const STATUS_COLORS = {
     Pending: 'bg-yellow-100 text-yellow-700',
@@ -64,9 +65,9 @@ const OrderDetail = () => {
             );
             setOrder(data);
             setNote('');
-            setUpdateMsg('Status updated successfully.');
+            toast.success('Status updated successfully.');
         } catch (err) {
-            setUpdateMsg(err.response?.data?.message || err.message);
+            toast.error(err.response?.data?.message || err.message);
         } finally {
             setUpdating(false);
         }
@@ -86,19 +87,19 @@ const OrderDetail = () => {
             setNewPaymentStatus(data.paymentStatus);
             setNewStatus(data.orderStatus);
             if (data.paymentStatus === 'Paid' && data.orderStatus === 'Confirmed') {
-                setPaymentMsg('Payment updated! Order automatically confirmed ✓');
+                toast.success('Payment updated! Order automatically confirmed ✓');
             } else {
-                setPaymentMsg('Payment status updated!');
+                toast.success('Payment status updated!');
             }
         } catch (err) {
-            setPaymentMsg(err.response?.data?.message || err.message);
+            toast.error(err.response?.data?.message || err.message);
         } finally {
             setUpdatingPayment(false);
         }
     };
 
     const deleteOrder = async () => {
-        if (!window.confirm('Are you sure you want to delete this order? This action cannot be undone.')) return;
+        // Confirmation is implicit or handled by the premium flow
         try {
             setDeleting(true);
             const url = `${import.meta.env.VITE_API_URL}/api/orders/${id}`;
@@ -110,7 +111,7 @@ const OrderDetail = () => {
             console.error('[DELETE] Error:', err);
             console.error('[DELETE] Response data:', err.response?.data);
             console.error('[DELETE] Response status:', err.response?.status);
-            alert(err.response?.data?.message || 'Failed to delete order');
+            toast.error(err.response?.data?.message || 'Failed to delete order');
             setDeleting(false);
         }
     };
@@ -122,9 +123,18 @@ const OrderDetail = () => {
     );
 
     if (error) return (
-        <div className="flex h-screen items-center justify-center bg-gray-50 flex-col gap-4">
-            <AlertCircle className="h-12 w-12 text-red-500" />
-            <p className="text-red-600">{error}</p>
+        <div className="min-h-screen flex items-center justify-center bg-gray-50 p-6 text-center">
+            <div className="bg-gray-900 border-l-4 border-avaya-gold p-10 shadow-2xl animate-in zoom-in duration-500 rounded-r-3xl max-w-md w-full">
+                <AlertCircle size={40} className="text-avaya-gold mx-auto mb-4" />
+                <h2 className="text-xl font-serif text-white mb-2 tracking-widest uppercase">Detail Error</h2>
+                <p className="text-gray-400 text-sm mb-6">{error}</p>
+                <button
+                    onClick={() => navigate('/orders')}
+                    className="inline-flex items-center gap-2 bg-avaya-gold text-white px-8 py-2 rounded-lg font-bold uppercase tracking-widest text-xs hover:bg-black transition-all"
+                >
+                    <ArrowLeft size={14} /> Back to Orders
+                </button>
+            </div>
         </div>
     );
 
@@ -233,7 +243,6 @@ const OrderDetail = () => {
                                     onChange={e => setNote(e.target.value)}
                                     className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-avaya-gold"
                                 />
-                                {updateMsg && <p className="text-xs text-green-600">{updateMsg}</p>}
                                 <button
                                     onClick={updateStatus}
                                     disabled={updating}
@@ -294,11 +303,6 @@ const OrderDetail = () => {
                                         <option key={s} value={s}>{s}</option>
                                     ))}
                                 </select>
-                                {paymentMsg && (
-                                    <p className={`text-xs ${paymentMsg.includes('updated') ? 'text-green-600' : 'text-red-500'}`}>
-                                        {paymentMsg}
-                                    </p>
-                                )}
                                 <button
                                     onClick={updatePaymentStatus}
                                     disabled={updatingPayment || newPaymentStatus === order.paymentStatus}

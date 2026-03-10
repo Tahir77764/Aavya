@@ -161,7 +161,37 @@ const Layout = () => {
 function App() {
   return (
     <Router>
-      <Toaster position="top-center" />
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          className: 'trajan-font',
+          style: {
+            background: '#111827',
+            color: '#fff',
+            border: '1px solid #D4AF37',
+            borderRadius: '4px',
+            fontSize: '14px',
+            fontFamily: 'TrajanPro, serif',
+            letterSpacing: '0.05em',
+            padding: '16px',
+            boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.5)',
+          },
+          success: {
+            duration: 4000,
+            iconTheme: {
+              primary: '#D4AF37',
+              secondary: '#111827',
+            },
+          },
+          error: {
+            duration: 5000,
+            iconTheme: {
+              primary: '#ef4444',
+              secondary: '#fff',
+            },
+          },
+        }}
+      />
       <Layout />
     </Router>
   );

@@ -3,6 +3,7 @@ import axios from 'axios';
 import { authConfig } from "../utils/authConfig";
 import { useNavigate } from 'react-router-dom';
 import { Loader2, AlertCircle, ShoppingBag, Eye, ChevronLeft, ChevronRight, Trash2 } from 'lucide-react';
+import { toast } from 'react-hot-toast';
 
 const STATUS_COLORS = {
     Pending: 'bg-yellow-100 text-yellow-700',
@@ -49,13 +50,17 @@ const OrderList = () => {
     }, [page, statusFilter]);
 
     const deleteOrder = async (id) => {
+        // Direct deletion with toast feedback
         try {
+            setDeleting(id);
             await axios.delete(`${import.meta.env.VITE_API_URL}/api/orders/${id}`, authConfig());
-
             setOrders(prev => prev.filter(order => order._id !== id));
-
-        } catch (error) {
-            console.error(error);
+            toast.success('Order deleted successfully');
+        } catch (err) {
+            console.error(err);
+            toast.error(err.response?.data?.message || 'Failed to delete order');
+        } finally {
+            setDeleting(null);
         }
     };
 
@@ -66,9 +71,18 @@ const OrderList = () => {
     );
 
     if (error) return (
-        <div className="flex h-screen items-center justify-center bg-gray-50 flex-col gap-4">
-            <AlertCircle className="h-12 w-12 text-red-500" />
-            <p className="text-red-600 font-medium">{error}</p>
+        <div className="min-h-screen flex items-center justify-center bg-gray-50 p-6">
+            <div className="bg-gray-900 border-l-4 border-avaya-gold p-8 shadow-2xl animate-in zoom-in duration-300 rounded-r-3xl max-w-lg w-full text-center">
+                <AlertCircle className="h-16 w-16 text-avaya-gold mx-auto mb-6" />
+                <h2 className="text-gray-200 font-bold uppercase tracking-widest text-lg mb-2">Order System Error</h2>
+                <p className="text-gray-400 font-medium mb-8">{error}</p>
+                <button
+                    onClick={() => window.location.reload()}
+                    className="bg-avaya-gold text-white px-8 py-3 rounded-xl font-bold uppercase tracking-widest text-xs hover:bg-black transition-all"
+                >
+                    Retry Connection
+                </button>
+            </div>
         </div>
     );
 

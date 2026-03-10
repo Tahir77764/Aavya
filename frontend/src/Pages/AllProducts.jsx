@@ -92,8 +92,14 @@ const AllProducts = () => {
                         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-avaya-gold"></div>
                     </div>
                 ) : products.length === 0 ? (
-                    <div className="text-center text-gray-500 py-20">
-                        <p className="text-xl">No products found in this collection.</p>
+                    <div className="flex flex-col items-center justify-center py-24 text-center">
+                        <div className="bg-gray-900 border-l-4 border-avaya-gold p-12 shadow-2xl animate-in zoom-in duration-500 rounded-r-[3rem] max-w-xl">
+                            <h2 className="text-3xl font-trajan text-white mb-4 tracking-widest uppercase">Collection Coming Soon</h2>
+                            <p className="text-gray-400 font-sans mb-8">We are currently curating new pieces for this collection. Please check back soon.</p>
+                            <Link to="/" className="inline-block bg-avaya-gold text-white px-8 py-3 rounded-lg font-bold uppercase tracking-widest text-xs hover:bg-white hover:text-black transition-all">
+                                View Featured Pieces
+                            </Link>
+                        </div>
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">

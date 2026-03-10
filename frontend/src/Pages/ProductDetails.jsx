@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../Utils/api';
 import { useCart } from '../Context/CartContext';
-import { Star, ShoppingBag, Truck, ShieldCheck, ArrowLeft, Plus, Minus } from 'lucide-react';
+import { Star, ShoppingBag, Truck, ShieldCheck, ArrowLeft, Plus, Minus, AlertCircle } from 'lucide-react';
+import { toast } from 'react-hot-toast';
 
 // Import images statically to map them (same as TrendingProducts for consistency if needed)
 import trending1 from '../Assets/trending1.jpg';
@@ -56,14 +57,13 @@ const ProductDetails = () => {
     const handleAddToCart = async () => {
         try {
             await addToCart(product, qty);
-            alert('Added to Cart!');
+            toast.success('Added to your collection');
         } catch (error) {
             if (error.message.includes('login')) {
-                if (window.confirm("You need to login to add items to cart. Proceed to login?")) {
-                    navigate('/login');
-                }
+                toast.error('Please login to continue');
+                setTimeout(() => navigate('/login'), 1500);
             } else {
-                alert(error.message);
+                toast.error(error.message || 'Failed to add to cart');
             }
         }
     };
@@ -74,11 +74,10 @@ const ProductDetails = () => {
             navigate('/cart');
         } catch (error) {
             if (error.message.includes('login')) {
-                if (window.confirm("You need to login to proceed. Proceed to login?")) {
-                    navigate('/login');
-                }
+                toast.error('Please login to proceed');
+                setTimeout(() => navigate('/login'), 1500);
             } else {
-                alert(error.message);
+                toast.error(error.message || 'Error occurred');
             }
         }
     };
@@ -97,8 +96,18 @@ const ProductDetails = () => {
     );
 
     if (error) return (
-        <div className="min-h-screen flex items-center justify-center text-red-500">
-            {error}
+        <div className="min-h-screen flex items-center justify-center p-6 bg-gray-50">
+            <div className="bg-gray-900 border-l-4 border-avaya-gold p-8 shadow-2xl animate-in zoom-in duration-300 rounded-r-3xl max-w-lg w-full text-center">
+                <AlertCircle className="h-16 w-16 text-avaya-gold mx-auto mb-6" />
+                <h2 className="text-gray-200 font-bold uppercase tracking-widest text-lg mb-2">Product Not Found</h2>
+                <p className="text-gray-400 font-medium mb-8">{error}</p>
+                <button
+                    onClick={() => navigate('/')}
+                    className="bg-avaya-gold text-white px-8 py-3 rounded-xl font-bold uppercase tracking-widest text-xs hover:bg-black transition-all"
+                >
+                    Back to Collection
+                </button>
+            </div>
         </div>
     );
 

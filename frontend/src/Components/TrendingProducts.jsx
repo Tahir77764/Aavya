@@ -3,6 +3,7 @@ import { ShoppingBag, Star } from 'lucide-react';
 import { useCart } from '../Context/CartContext';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../Utils/api';
+import { toast } from 'react-hot-toast';
 
 // Import images statically to map them
 import trending1 from '../Assets/trending1.jpg';
@@ -28,14 +29,15 @@ const TrendingProducts = () => {
     const handleAddToCart = async (product) => {
         try {
             await addToCart(product, 1);
-            alert('Product added to cart!');
+            toast.success('Added to your collection');
         } catch (error) {
             if (error.message?.includes('login')) {
-                if (window.confirm('You need to login to add items to cart. Proceed to login?')) {
-                    navigate('/login');
-                }
+                toast.error('Please login to continue', {
+                    icon: '👤',
+                });
+                setTimeout(() => navigate('/login'), 1500);
             } else {
-                alert(error.message || 'Failed to add to cart.');
+                toast.error(error.message || 'Failed to add to cart');
             }
         }
     };

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { Upload, ArrowLeft, Loader2, X, Trash2, Package } from 'lucide-react';
+import { toast } from 'react-hot-toast';
 
 const ProductEdit = () => {
     const { id } = useParams();
@@ -102,7 +103,7 @@ const ProductEdit = () => {
 
             await axios.put(`${import.meta.env.VITE_API_URL}/api/products/${id}`, formData, config);
             setUploading(false);
-            alert('Product updated successfully');
+            toast.success('Product updated successfully');
             navigate(`/products?pageNumber=${returnPage}`);
         } catch (err) {
             setError(err.response?.data?.message || err.message);
@@ -135,10 +136,13 @@ const ProductEdit = () => {
 
                 <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
                     {error && (
-                        <div className="bg-red-50 border-l-4 border-red-500 p-4 m-6">
-                            <div className="flex">
-                                <div className="ml-3">
-                                    <p className="text-sm text-red-700">{error}</p>
+                        <div className="bg-gray-900 border-l-4 border-avaya-gold p-4 mx-8 mt-8 shadow-lg animate-in fade-in slide-in-from-top-2 duration-300 rounded-r-xl">
+                            <div className="flex items-center gap-3">
+                                <div className="flex-shrink-0 h-10 w-10 bg-avaya-gold/10 rounded-full flex items-center justify-center">
+                                    <span className="text-avaya-gold text-lg">⚠️</span>
+                                </div>
+                                <div>
+                                    <p className="text-sm text-gray-200 font-bold uppercase tracking-widest">{error}</p>
                                 </div>
                             </div>
                         </div>

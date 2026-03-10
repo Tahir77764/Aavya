@@ -48,9 +48,15 @@ const AdminLogin = () => {
                         </div>
 
                         {error && (
-                            <div className="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 rounded text-sm shadow-sm" role="alert">
-                                <p className="font-bold">Error</p>
-                                <p>{error}</p>
+                            <div className="bg-gray-900 border-l-4 border-avaya-gold p-4 shadow-lg animate-in fade-in slide-in-from-top-2 duration-300 rounded-r-xl">
+                                <div className="flex items-center gap-3">
+                                    <div className="flex-shrink-0 h-8 w-8 bg-avaya-gold/10 rounded-full flex items-center justify-center">
+                                        <span className="text-avaya-gold text-sm">⚠️</span>
+                                    </div>
+                                    <div>
+                                        <p className="text-[10px] text-gray-200 font-bold uppercase tracking-widest leading-tight">{error}</p>
+                                    </div>
+                                </div>
                             </div>
                         )}
 

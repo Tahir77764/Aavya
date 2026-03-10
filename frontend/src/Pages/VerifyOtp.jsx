@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import api from '../Utils/api';
+import { toast } from 'react-hot-toast';
 
 const VerifyOtp = () => {
     const [otp, setOtp] = useState('');
@@ -31,9 +32,12 @@ const VerifyOtp = () => {
             );
 
             localStorage.setItem('userInfo', JSON.stringify(data));
+            toast.success('Account verified! Welcome to Aavya.');
             navigate('/');
         } catch (err) {
-            setError(err.response && err.response.data.message ? err.response.data.message : err.message);
+            const msg = err.response && err.response.data.message ? err.response.data.message : err.message;
+            setError(msg);
+            toast.error(msg);
         }
     };
 
@@ -42,7 +46,18 @@ const VerifyOtp = () => {
             <div className="w-full max-w-md bg-white rounded-lg shadow-xl p-8">
                 <h2 className="text-3xl font-serif text-center text-gray-800 mb-8">Verify OTP</h2>
                 <p className="text-center text-gray-600 mb-6">Enter the OTP sent to {email}</p>
-                {error && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">{error}</div>}
+                {error && (
+                    <div className="bg-gray-900 border-l-4 border-avaya-gold p-4 mb-6 shadow-lg animate-in fade-in slide-in-from-top-2 duration-300">
+                        <div className="flex items-center gap-3">
+                            <div className="flex-shrink-0">
+                                <span className="text-avaya-gold text-xl">⚠️</span>
+                            </div>
+                            <div>
+                                <p className="text-sm text-gray-200 font-trajan tracking-wider uppercase">{error}</p>
+                            </div>
+                        </div>
+                    </div>
+                )}
 
                 <form onSubmit={submitHandler} className="space-y-6">
                     <div>

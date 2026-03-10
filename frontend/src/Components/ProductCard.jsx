@@ -2,35 +2,31 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ShoppingCart, Star } from 'lucide-react';
 import { useCart } from '../Context/CartContext';
+import { toast } from 'react-hot-toast';
 
 const ProductCard = ({ product }) => {
     const { addToCart, isLoggedIn } = useCart();
     const [adding, setAdding] = useState(false);
-    const [message, setMessage] = useState('');
 
     const handleAddToCart = async (e) => {
         e.preventDefault(); // Prevent navigation if clicking from a Link
 
         if (!isLoggedIn()) {
-            setMessage('Please login to add items to cart');
-            setTimeout(() => setMessage(''), 3000);
+            toast.error('Please login to continue', { icon: '👤' });
             return;
         }
 
         if (product.stock === 0) {
-            setMessage('Out of stock');
-            setTimeout(() => setMessage(''), 3000);
+            toast.error('Out of stock');
             return;
         }
 
         try {
             setAdding(true);
             await addToCart(product._id, 1);
-            setMessage('Added to cart!');
-            setTimeout(() => setMessage(''), 3000);
+            toast.success('Added to collection');
         } catch (error) {
-            setMessage(error.message || 'Failed to add to cart');
-            setTimeout(() => setMessage(''), 3000);
+            toast.error(error.message || 'Failed to add to cart');
         } finally {
             setAdding(false);
         }
@@ -146,15 +142,7 @@ const ProductCard = ({ product }) => {
                     {adding ? 'Adding...' : product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
                 </button>
 
-                {/* Message */}
-                {message && (
-                    <p className={`text-xs mt-2 text-center ${message.includes('success') || message.includes('Added')
-                        ? 'text-green-600'
-                        : 'text-red-600'
-                        }`}>
-                        {message}
-                    </p>
-                )}
+                {/* Removed local message display */}
             </div>
         </div>
     );

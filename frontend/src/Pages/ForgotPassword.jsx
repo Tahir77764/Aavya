@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import api from '../Utils/api';
+import { toast } from 'react-hot-toast';
 import { Link } from 'react-router-dom';
 
 const ForgotPassword = () => {
@@ -13,8 +14,11 @@ const ForgotPassword = () => {
             const { data } = await api.post("/api/users/forgot-password", { email });
             setMessage(data.data);
             setError("");
+            toast.success('Reset link sent to your email!');
         } catch (error) {
-            setError(error.response && error.response.data.message ? error.response.data.message : error.message);
+            const msg = error.response && error.response.data.message ? error.response.data.message : error.message;
+            setError(msg);
+            toast.error(msg);
             setMessage("");
         }
     };
@@ -30,8 +34,18 @@ const ForgotPassword = () => {
                         Enter your email address and we'll send you a link to reset your password.
                     </p>
                 </div>
-                {error && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative text-center">{error}</div>}
-                {message && <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative text-center">{message}</div>}
+                {(error || message) && (
+                    <div className="bg-gray-900 border-l-4 border-avaya-gold p-4 mb-6 shadow-lg animate-in fade-in slide-in-from-top-2 duration-300">
+                        <div className="flex items-center gap-3">
+                            <div className="flex-shrink-0">
+                                <span className="text-avaya-gold text-xl">⚠️</span>
+                            </div>
+                            <div>
+                                <p className="text-sm text-gray-200 font-trajan tracking-wider uppercase">{error || message}</p>
+                            </div>
+                        </div>
+                    </div>
+                )}
                 <form className="mt-8 space-y-6" onSubmit={submitHandler}>
                     <div className="rounded-md shadow-sm -space-y-px">
                         <div>

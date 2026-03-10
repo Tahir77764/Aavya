@@ -4,6 +4,7 @@ import { Trash2, Plus, Minus, ShoppingBag, ArrowLeft } from 'lucide-react';
 import { useCart } from '../Context/CartContext';
 import { WHATSAPP_NUMBER } from '../Utils/constants';
 import api from '../Utils/api';
+import { toast } from 'react-hot-toast';
 
 const Cart = () => {
     const navigate = useNavigate();
@@ -41,29 +42,27 @@ const Cart = () => {
             setUpdating(prev => ({ ...prev, [itemId]: true }));
             await updateQuantity(itemId, newQuantity);
         } catch (error) {
-            alert(error.message || 'Failed to update quantity');
+            toast.error(error.message || 'Failed to update quantity');
         } finally {
             setUpdating(prev => ({ ...prev, [itemId]: false }));
         }
     };
 
     const handleRemoveItem = async (itemId) => {
-        if (!window.confirm('Remove this item from cart?')) return;
-
         try {
             await removeFromCart(itemId);
+            toast.success('Item removed');
         } catch (error) {
-            alert(error.message || 'Failed to remove item');
+            toast.error(error.message || 'Failed to remove item');
         }
     };
 
     const handleClearCart = async () => {
-        if (!window.confirm('Clear all items from cart?')) return;
-
         try {
             await clearCart();
+            toast.success('Cart cleared');
         } catch (error) {
-            alert(error.message || 'Failed to clear cart');
+            toast.error(error.message || 'Failed to clear cart');
         }
     };
 
@@ -205,17 +204,17 @@ const Cart = () => {
 
     if (!cart || !cart.items || cart.items.length === 0) {
         return (
-            <div className="min-h-screen bg-gray-50 flex items-center justify-center font-serif">
-                <div className="text-center px-4">
-                    <ShoppingBag className="mx-auto text-gray-300 mb-6" size={80} />
-                    <h2 className="text-3xl font-bold text-gray-900 mb-4">Your Cart is Empty</h2>
-                    <p className="text-gray-600 mb-8">Add some beautiful jewelry to your cart!</p>
+            <div className="min-h-screen bg-gray-50 flex items-center justify-center font-serif py-20 px-4">
+                <div className="bg-gray-900 border-l-4 border-avaya-gold p-10 md:p-16 shadow-2xl animate-in zoom-in duration-500 rounded-r-[3rem] max-w-2xl w-full text-center relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-avaya-gold/5 rounded-full -mr-32 -mt-32 blur-3xl"></div>
+                    <ShoppingBag className="mx-auto text-avaya-gold mb-8 opacity-90" size={100} strokeWidth={1} />
+                    <h2 className="text-4xl font-trajan text-white mb-6 tracking-widest uppercase">Your collection is empty</h2>
+                    <p className="text-gray-400 font-sans mb-10 text-lg leading-relaxed">Discover exquisite handcrafted pieces waiting for you.</p>
                     <Link
                         to="/"
-                        className="inline-flex items-center gap-2 bg-avaya-gold text-white px-8 py-3 rounded-sm hover:bg-yellow-600 transition-colors font-bold"
+                        className="inline-flex items-center gap-4 bg-avaya-gold text-white px-10 py-4 rounded-xl hover:bg-white hover:text-black transition-all duration-500 font-bold uppercase tracking-[0.2em] text-sm shadow-xl"
                     >
-                        <ArrowLeft size={20} />
-                        Continue Shopping
+                        Explore Masterpieces
                     </Link>
                 </div>
             </div>
@@ -352,7 +351,9 @@ const Cart = () => {
                             </div>
 
                             {localError && (
-                                <p className="text-red-600 text-sm mb-3 text-center">{localError}</p>
+                                <div className="bg-gray-900 border-l-4 border-avaya-gold p-4 mb-4 shadow-lg animate-in fade-in slide-in-from-top-2 duration-300">
+                                    <p className="text-[10px] text-gray-200 font-bold uppercase tracking-widest leading-tight">{localError}</p>
+                                </div>
                             )}
                             <button
                                 onClick={handleCheckout}

@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import api from '../Utils/api';
 import { Mail, Phone, MapPin, Send, Loader2 } from 'lucide-react';
 import backgroundImage from '../Assets/background.png';
+import { toast } from 'react-hot-toast';
 
 const Contact = () => {
     const [formData, setFormData] = useState({
@@ -25,10 +26,10 @@ const Contact = () => {
 
         try {
             await api.post('/api/contact', formData);
-            setStatus({ type: 'success', message: 'Message sent successfully! We will get back to you soon.' });
+            toast.success('Message sent successfully!');
             setFormData({ name: '', email: '', message: '', subject: '' });
         } catch (error) {
-            setStatus({ type: 'error', message: 'Failed to send message. Please try again later.' });
+            toast.error('Failed to send message. Please try again.');
         } finally {
             setLoading(false);
         }
@@ -94,12 +95,6 @@ const Contact = () => {
                 {/* Form Side */}
                 <div className="p-10 md:w-2/3 bg-white/50 backdrop-blur-sm">
                     <h2 className="text-2xl font-bold text-avaya-dark mb-8 font-trajan border-b border-avaya-gold/30 pb-4 inline-block">Send us a Message</h2>
-
-                    {status.message && (
-                        <div className={`mb-6 p-4 rounded-lg flex items-center gap-2 ${status.type === 'success' ? 'bg-green-50 text-green-800 border border-green-200' : 'bg-red-50 text-red-800 border border-red-200'}`}>
-                            <span>{status.message}</span>
-                        </div>
-                    )}
 
                     <form onSubmit={handleSubmit} className="space-y-6">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

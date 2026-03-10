@@ -4,6 +4,7 @@ import {
     ShoppingBag, User, LogOut, RefreshCw, ChevronDown, ChevronUp,
     Package, Clock, CheckCircle, Truck, XCircle, AlertCircle, Ban
 } from 'lucide-react';
+import { toast } from 'react-hot-toast';
 
 const ONE_HOUR_MS = 60 * 60 * 1000;
 
@@ -67,14 +68,14 @@ const OrderCard = ({ order, onCancelled }) => {
     const { canCancel, timeLabel } = useCancelTimer(order.createdAt);
 
     const handleCancel = async () => {
-        if (!window.confirm('Are you sure you want to cancel this order? This cannot be undone.')) return;
         setCancelling(true);
         try {
             const { default: api } = await import('../Utils/api');
             await api.put(`/api/orders/${order._id}/cancel`, {});
+            toast.success('Order cancelled successfully');
             onCancelled(order._id);
         } catch (err) {
-            alert(err.response?.data?.message || 'Failed to cancel order. Please try again.');
+            toast.error(err.response?.data?.message || 'Failed to cancel order');
         } finally {
             setCancelling(false);
         }
@@ -375,32 +376,34 @@ const Profile = () => {
                             {/* Error */}
                             {!ordersLoading && ordersError && (
                                 <div className="flex flex-col items-center justify-center py-10 text-center">
-                                    <AlertCircle size={36} className="text-red-400 mb-3" />
-                                    <p className="text-red-600 text-sm mb-4">{ordersError}</p>
-                                    <button
-                                        onClick={fetchOrders}
-                                        className="text-sm bg-avaya-gold text-white px-4 py-2 rounded-sm hover:bg-yellow-600"
-                                    >
-                                        Try Again
-                                    </button>
+                                    <div className="bg-gray-900 border-l-4 border-avaya-gold p-6 shadow-xl animate-in fade-in slide-in-from-top-2 duration-300 rounded-r-2xl max-w-sm">
+                                        <AlertCircle size={36} className="text-avaya-gold mx-auto mb-4" />
+                                        <p className="text-gray-200 font-bold uppercase tracking-widest text-sm mb-4">{ordersError}</p>
+                                        <button
+                                            onClick={fetchOrders}
+                                            className="text-xs bg-avaya-gold text-white px-6 py-2 rounded-lg font-bold hover:bg-black transition-all uppercase tracking-widest"
+                                        >
+                                            Try Again
+                                        </button>
+                                    </div>
                                 </div>
                             )}
 
                             {/* Empty */}
                             {!ordersLoading && !ordersError && orders.length === 0 && (
-                                <div className="flex flex-col items-center justify-center py-10 text-center">
-                                    <div className="bg-gray-100 p-4 rounded-full mb-4">
-                                        <ShoppingBag size={32} className="text-gray-400" />
+                                <div className="bg-gray-900 border-l-4 border-avaya-gold p-12 shadow-2xl animate-in zoom-in duration-500 rounded-r-[3rem] max-w-xl">
+                                    <div className="bg-avaya-gold/10 p-6 rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-6">
+                                        <ShoppingBag size={48} className="text-avaya-gold" />
                                     </div>
-                                    <h3 className="text-lg font-medium text-gray-900">No Orders Yet</h3>
-                                    <p className="mt-1 text-gray-500 text-sm">
-                                        Looks like you haven't made any purchases yet.
+                                    <h3 className="text-3xl font-trajan text-white mb-4 tracking-widest uppercase">No Orders Yet</h3>
+                                    <p className="mt-1 text-gray-400 font-sans mb-8">
+                                        Your collection journey begins with your first masterpiece.
                                     </p>
                                     <button
                                         onClick={() => navigate('/')}
-                                        className="mt-6 text-avaya-gold hover:text-yellow-600 font-medium text-sm"
+                                        className="bg-avaya-gold text-white px-10 py-3 rounded-lg font-bold uppercase tracking-widest text-xs hover:bg-white hover:text-black transition-all"
                                     >
-                                        Start Shopping &rarr;
+                                        Start Your Story
                                     </button>
                                 </div>
                             )}

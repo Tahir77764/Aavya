@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
 import { useCart } from '../Context/CartContext';
 import api from '../Utils/api';
 
@@ -26,10 +27,13 @@ const Login = () => {
             );
 
             localStorage.setItem('userInfo', JSON.stringify(data));
-            await fetchCart(); // Load user's cart after login
+            await fetchCart();
+            toast.success('Welcome back to Aavya!');
             navigate('/');
         } catch (err) {
-            setError(err.response && err.response.data.message ? err.response.data.message : err.message);
+            const msg = err.response && err.response.data.message ? err.response.data.message : err.message;
+            setError(msg);
+            toast.error(msg);
         }
     };
 
@@ -37,7 +41,18 @@ const Login = () => {
         <div className="min-h-screen py-20 flex justify-center items-center bg-gray-50">
             <div className="w-full max-w-md bg-white rounded-lg shadow-xl p-8">
                 <h2 className="text-3xl font-serif text-center text-gray-800 mb-8">Sign In</h2>
-                {error && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">{error}</div>}
+                {error && (
+                    <div className="bg-gray-900 border-l-4 border-avaya-gold p-4 mb-6 shadow-lg animate-in fade-in slide-in-from-top-2 duration-300">
+                        <div className="flex items-center gap-3">
+                            <div className="flex-shrink-0">
+                                <span className="text-avaya-gold text-xl">⚠️</span>
+                            </div>
+                            <div>
+                                <p className="text-sm text-gray-200 font-trajan tracking-wider uppercase">{error}</p>
+                            </div>
+                        </div>
+                    </div>
+                )}
                 <form onSubmit={submitHandler} className="space-y-6">
                     <div>
                         <label className="block text-gray-700 text-sm font-bold mb-2">Email Address</label>

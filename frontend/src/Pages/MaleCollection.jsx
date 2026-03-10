@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../Context/CartContext';
 import ProductFilterBar from '../Components/ProductFilterBar';
+import { toast } from 'react-hot-toast';
 
 // Import all potential images for mapping
 import male1 from '../Assets/male/male1.png';
@@ -62,14 +63,13 @@ const MaleCollection = () => {
     const handleAddToCart = async (productId) => {
         try {
             await addToCart(productId, 1);
-            alert('Product added to cart!');
+            toast.success('Added to collection');
         } catch (err) {
             if (err.message && (err.message.includes('login') || err.message.includes('Login'))) {
-                if (window.confirm("You need to login to add items to cart. Proceed to login?")) {
-                    navigate('/login');
-                }
+                toast.error('Please login to continue', { icon: '👤' });
+                setTimeout(() => navigate('/login'), 1500);
             } else {
-                alert(`Failed to add to cart: ${err.message}`);
+                toast.error(`Failed: ${err.message}`);
             }
         }
     };
