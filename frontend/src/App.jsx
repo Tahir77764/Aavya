@@ -29,6 +29,7 @@ import Home from './Components/Home';
 import AllProducts from './Pages/AllProducts';
 import About from './Pages/About';
 import SearchResults from './Pages/SearchResults';
+import Location from './Pages/Location';
 
 const HomeScreen = () => (
     <>
@@ -70,6 +71,7 @@ function App() {
                             <Route path="/shipping-policy" element={<ShippingPolicy />} />
                             <Route path="/returns-exchanges" element={<ReturnsExchanges />} />
                             <Route path="/search" element={<SearchResults />} />
+                            <Route path="/location" element={<Location />} />
                         </Routes>
                     </main>
                     <Footer />

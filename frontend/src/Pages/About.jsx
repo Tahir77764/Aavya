@@ -1,24 +1,28 @@
 import React from 'react';
+import jpeg from '../Assets/about.jpeg';
+import aboutHero from '../Assets/about_hero.png';
 import { Hammer, Leaf, Sparkles, Award, Globe, Heart } from 'lucide-react';
 
 const About = () => {
     return (
         <div className="bg-white text-gray-800 font-trajan">
             {/* Hero Section */}
-            <div className="relative bg-gray-900 py-24 px-4 sm:px-6 lg:px-8 overflow-hidden">
+            {/* Hero Section */}
+            <div className="relative h-[70vh] min-h-[500px] overflow-hidden flex items-center justify-center bg-black">
                 <div className="absolute inset-0">
                     <img
-                        className="w-full h-full object-cover opacity-60"
-                        src="https://images.unsplash.com/photo-1573408301185-9146fe635e26?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
+                        className="w-full h-full object-cover"
+                        src={aboutHero}
                         alt="Jewelry crafting"
                     />
-                    <div className="absolute inset-0 bg-gray-900 mix-blend-multiply" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
                 </div>
-                <div className="relative max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8 text-center">
-                    <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl font-trajan text-avaya-gold">
+                <div className="relative z-10 max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8 text-center">
+                    <h1 className="text-5xl md:text-8xl font-bold tracking-[0.3em] text-white font-trajan text-avaya-gold uppercase drop-shadow-2xl">
                         Our Story
                     </h1>
-                    <p className="mt-8 text-xl text-gray-200 max-w-3xl mx-auto font-trajan leading-relaxed">
+                    <div className="w-32 h-1 bg-avaya-gold mx-auto my-8"></div>
+                    <p className="text-xl md:text-2xl text-gray-200 max-w-3xl mx-auto font-trajan leading-relaxed tracking-widest drop-shadow-lg italic">
                         A legacy of brilliance, crafting timeless elegance for the modern world.
                     </p>
                 </div>
@@ -100,11 +104,11 @@ const About = () => {
                                         "Jewellery is the art of capturing light and emotion in a timeless form. My journey began with a simple passion for stones and stories, evolved into a lifelong pursuit of perfection."
                                     </p>
                                     <p>
-                                        With over 20 years of experience in gemology and design, Tahir Baba has dedicated his life to creating pieces that are not just worn, but cherished as symbols of love and legacy.
+                                        With over 20 years of experience in gemology and design, Munna Lal Swarnkar has dedicated his life to creating pieces that are not just worn, but cherished as symbols of love and legacy.
                                     </p>
                                 </div>
                                 <div className="mt-8 border-l-4 border-avaya-gold pl-4">
-                                    <h3 className="text-xl font-bold text-gray-900 font-trajan tracking-widest">Tahir Baba</h3>
+                                    <h3 className="text-xl font-bold text-gray-900 font-trajan tracking-widest">Sri.Munna Lal Swarnkar</h3>
                                     <p className="text-avaya-gold font-bold text-sm">Founder & Creative Visionary</p>
                                 </div>
                             </div>
@@ -113,7 +117,7 @@ const About = () => {
                             <img
                                 className="relative mx-auto rounded-lg shadow-lg transform hover:scale-105 transition-transform duration-500"
                                 width={490}
-                                src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+                                src={jpeg}
                                 alt="Founder"
                             />
                         </div>

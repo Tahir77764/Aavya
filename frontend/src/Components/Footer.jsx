@@ -38,6 +38,7 @@ const Footer = () => {
                         <li><Link to="/about" className="hover:text-avaya-gold tracking-[0.05em] transition-colors duration-300">About Us</Link></li>
                         <li><Link to="/shipping-policy" className="hover:text-avaya-gold tracking-[0.05em] transition-colors duration-300">Shipping Policy</Link></li>
                         <li><Link to="/returns-exchanges" className="hover:text-avaya-gold tracking-[0.05em] transition-colors duration-300">Returns & Exchanges</Link></li>
+                        <li><Link to="/location" className="hover:text-avaya-gold tracking-[0.05em] transition-colors duration-300">Store Location</Link></li>
                     </ul>
                 </div>
 
